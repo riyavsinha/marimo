@@ -38,7 +38,7 @@ test("default UserConfig - empty", () => {
         "copilot": false,
       },
       "display": {
-        "cell_output": "above",
+        "cell_output": "below",
         "code_editor_font_size": 14,
         "dataframes": "rich",
         "default_width": "medium",
@@ -90,7 +90,7 @@ test("default UserConfig - one level", () => {
         "copilot": false,
       },
       "display": {
-        "cell_output": "above",
+        "cell_output": "below",
         "code_editor_font_size": 14,
         "dataframes": "rich",
         "default_width": "medium",

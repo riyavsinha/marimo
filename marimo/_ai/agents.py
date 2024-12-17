@@ -1,6 +1,7 @@
 # Copyright 2024 Marimo. All rights reserved.
 from __future__ import annotations
 
+from inspect import iscoroutine
 from typing import Any, Callable
 
 from marimo._output.rich_help import mddoc
@@ -27,6 +28,9 @@ async def run_agent(prompt: str, name: str = "default") -> Any:
     try:
         _registry = get_context().agent_registry
         agent_fn = _registry.get_agent(name)
-        return agent_fn(prompt)
+        result = agent_fn(prompt)
+        if iscoroutine(result):
+            return await result
+        return result
     except ContextNotInitializedError:
         pass

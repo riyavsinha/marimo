@@ -12,6 +12,7 @@ from marimo._config.config import MarimoConfig
 from marimo._config.manager import get_default_config_manager
 from marimo._plugins.ui._core.ids import NoIDProviderException
 from marimo._plugins.ui._core.registry import UIElementRegistry
+from marimo._runtime.agents import AgentRegistry
 from marimo._runtime.cell_lifecycle_registry import CellLifecycleRegistry
 from marimo._runtime.context.types import (
     ExecutionContext,
@@ -140,6 +141,7 @@ def initialize_script_context(
         ui_element_registry=UIElementRegistry(),
         state_registry=StateRegistry(),
         function_registry=FunctionRegistry(),
+        agent_registry=AgentRegistry(),
         cell_lifecycle_registry=CellLifecycleRegistry(),
         app_kernel_runner_registry=AppKernelRunnerRegistry(),
         virtual_file_registry=VirtualFileRegistry(),

@@ -24,6 +24,7 @@ __all__ = [
     "Thread",
     # Other namespaces
     "ai",
+    "editor",
     "ui",
     "islands",
     # Application elements
@@ -82,7 +83,7 @@ __all__ = [
     "video",
     "vstack",
 ]
-__version__ = "0.11.8"
+__version__ = "0.0.1"
 
 import marimo._ai as ai
 import marimo._islands as islands
@@ -117,7 +118,7 @@ from marimo._plugins.stateless.style import style
 from marimo._plugins.stateless.tabs import tabs
 from marimo._plugins.stateless.tree import tree
 from marimo._plugins.stateless.video import video
-from marimo._runtime import output
+from marimo._runtime import editor, output
 from marimo._runtime.capture import (
     capture_stderr,
     capture_stdout,

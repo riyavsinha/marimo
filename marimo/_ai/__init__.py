@@ -6,9 +6,11 @@ __all__ = [
     "ChatModelConfig",
     "ChatAttachment",
     "llm",
+    "agents",
 ]
 
 import marimo._ai.llm as llm
+from marimo._ai import agents
 from marimo._ai._types import (
     ChatAttachment,
     ChatMessage,

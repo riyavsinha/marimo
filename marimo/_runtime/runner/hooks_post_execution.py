@@ -1,7 +1,7 @@
 # Copyright 2024 Marimo. All rights reserved.
 from __future__ import annotations
 
-from typing import Callable
+from typing import Any, Callable, Coroutine
 
 from marimo import _loggers
 from marimo._ast.cell import CellImpl
@@ -20,6 +20,7 @@ from marimo._messaging.ops import (
     CellOp,
     Datasets,
     DataSourceConnections,
+    Suggestions,
     VariableValue,
     VariableValues,
 )
@@ -44,7 +45,8 @@ LOGGER = _loggers.marimo_logger()
 
 
 PostExecutionHookType = Callable[
-    [CellImpl, cell_runner.Runner, cell_runner.RunResult], None
+    [CellImpl, cell_runner.Runner, cell_runner.RunResult],
+    None | Coroutine[Any, Any, None],
 ]
 
 
@@ -202,6 +204,32 @@ def _broadcast_duckdb_datasource(
         ).broadcast()
     except Exception:
         return
+
+
+async def _broadcast_suggestions(
+    cell: CellImpl,
+    runner: cell_runner.Runner,
+    run_result: cell_runner.RunResult,
+) -> Coroutine[Any, Any, None]:
+    if not _is_edit_mode():
+        return
+
+    del run_result
+    # if there are still cells to run, we don't want to broadcast suggestions
+    if runner.pending():
+        return
+    if not cell.had_agent_run:
+        return
+
+    agent_name = cell.agent_name
+    suggestion_fn = (
+        get_context().agent_registry.get_agent(agent_name).suggestions_fn
+    )
+    if suggestion_fn is None:
+        return
+
+    suggestions = await suggestion_fn()
+    Suggestions(suggestions=suggestions).broadcast()
 
 
 @kernel_tracer.start_as_current_span("store_reference_to_output")
@@ -372,6 +400,7 @@ POST_EXECUTION_HOOKS: list[PostExecutionHookType] = [
     _broadcast_duckdb_datasource,
     _broadcast_outputs,
     _reset_matplotlib_context,
+    _broadcast_suggestions,
     # set status to idle after all post-processing is done, in case the
     # other hooks take a long time (broadcast outputs can take a long time
     # if a formatter is slow).

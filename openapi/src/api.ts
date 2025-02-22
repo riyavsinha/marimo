@@ -2721,7 +2721,19 @@ export interface components {
         }
       | components["schemas"]["FocusCell"]
       | components["schemas"]["UpdateCellCodes"]
-      | components["schemas"]["UpdateCellIdsRequest"];
+      | components["schemas"]["UpdateCellIdsRequest"]
+      | {
+          /** @enum {string} */
+          name: "suggestions";
+          suggestions: {
+            description: string;
+            id: string;
+            timestamp: number;
+            title: string;
+            /** @enum {string} */
+            type: "idea" | "warning" | "tip";
+          }[];
+        };
     /** @enum {string} */
     MimeType:
       | "application/json"

@@ -108,6 +108,7 @@ def _generate_server_api_schema() -> dict[str, Any]:
         ops.FocusCell,
         ops.MessageOperation,
         ops.DataSourceConnections,
+        # ops.Suggestions,
     ]
 
     # dataclass components used in requests/responses

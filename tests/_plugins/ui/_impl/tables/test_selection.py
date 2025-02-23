@@ -164,9 +164,7 @@ def test_add_selection_to_dataframe(backend: Any):
         {"name": ["Alice", "Bob", "Charlie"], "age": [30, 25, 35]},
         native_namespace=backend,
     )
-    with_selection, has_stable_row_id = add_selection_column(data.to_native())
-
-    assert has_stable_row_id is True
+    with_selection = add_selection_column(data.to_native())
 
     # Convert back to Narwhals to assert
     nw_df = nw.from_native(with_selection)
@@ -185,9 +183,7 @@ def test_add_selection_to_dataframe_already_has_index(backend: Any):
         },
         native_namespace=backend,
     )
-    with_selection, has_stable_row_id = add_selection_column(data.to_native())
-
-    assert has_stable_row_id is True
+    with_selection = add_selection_column(data.to_native())
 
     # Convert back to Narwhals to assert
     nw_df = nw.from_native(with_selection)
@@ -202,9 +198,7 @@ def test_remove_selection_column(backend: Any):
         {"name": ["Alice", "Bob", "Charlie"], "age": [30, 25, 35]},
         native_namespace=backend,
     )
-    with_selection, has_stable_row_id = add_selection_column(data.to_native())
-    assert has_stable_row_id is True
-
+    with_selection = add_selection_column(data.to_native())
     without_selection = remove_selection_column(with_selection)
     nw_df = nw.from_native(without_selection)
     assert nw_df.columns == ["name", "age"]

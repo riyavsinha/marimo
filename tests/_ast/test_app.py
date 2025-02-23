@@ -386,7 +386,8 @@ class TestApp:
 
         @app.cell
         def __() -> tuple[Any]:
-            def foo() -> None: ...
+            def foo() -> None:
+                ...
 
             return (foo,)
 
@@ -653,9 +654,6 @@ class TestAppComposition:
         assert result.output.text == vstack(["hello", "world"]).text
         assert not result.defs
 
-    @pytest.mark.xfail(
-        True, reason="Flaky in CI, can't repro locally", strict=False
-    )
     async def test_app_comp_basic(
         self, k: Kernel, exec_req: ExecReqProvider
     ) -> None:
@@ -707,9 +705,6 @@ class TestAppComposition:
         assert "value is first" not in html
         assert "value is second" in html
 
-    @pytest.mark.xfail(
-        True, reason="Flaky in CI, can't repro locally", strict=False
-    )
     async def test_app_comp_multiple_ui_elements(
         self, k: Kernel, exec_req: ExecReqProvider
     ) -> None:

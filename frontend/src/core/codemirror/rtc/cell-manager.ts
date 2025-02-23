@@ -9,7 +9,6 @@ import { WebSocketState } from "@/core/websocket/types";
 import { store } from "@/core/state/jotai";
 
 const DOC_KEY = "code";
-const LANGUAGE_KEY = "language";
 
 export class CellProviderManager {
   private providers = new Map<CellId, WebsocketProvider>();
@@ -28,14 +27,13 @@ export class CellProviderManager {
 
   getOrCreateProvider(
     cellId: CellId,
-    initialCode = "",
-  ): { provider: WebsocketProvider; ytext: Y.Text; ylanguage: Y.Text } {
+    initialCode: string,
+  ): { provider: WebsocketProvider; ytext: Y.Text } {
     const existingProvider = this.providers.get(cellId);
     if (existingProvider) {
       return {
         provider: existingProvider,
         ytext: existingProvider.doc.getText(DOC_KEY),
-        ylanguage: existingProvider.doc.getText(LANGUAGE_KEY),
       };
     }
 
@@ -46,14 +44,8 @@ export class CellProviderManager {
 
     const ydoc = new Y.Doc();
     const ytext = ydoc.getText(DOC_KEY);
-    const ylanguage = ydoc.getText(LANGUAGE_KEY);
-
-    // Replace
     if (initialCode && ytext.length === 0) {
-      ytext.doc?.transact(() => {
-        ytext.delete(0, ytext.length);
-        ytext.insert(0, initialCode);
-      });
+      ytext.insert(0, initialCode);
     }
 
     const params: Record<string, string> = {
@@ -68,7 +60,7 @@ export class CellProviderManager {
     const provider = new WebsocketProvider("ws", cellId, ydoc, { params });
     this.providers.set(cellId, provider);
 
-    return { provider, ytext, ylanguage };
+    return { provider, ytext };
   }
 
   listenForConnectionChanges(): void {

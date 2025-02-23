@@ -18,6 +18,7 @@ import { ColumnChartContext } from "@/components/data-table/column-summary";
 import { Logger } from "@/utils/Logger";
 
 import {
+  INDEX_COLUMN_NAME,
   toFieldTypes,
   type ColumnHeaderSummary,
   type FieldTypesWithExternalType,
@@ -77,7 +78,6 @@ interface Data<T> {
   textJustifyColumns?: Record<string, "left" | "center" | "right">;
   wrappedColumns?: string[];
   totalColumns: number;
-  hasStableRowId: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -132,7 +132,6 @@ export const DataTablePlugin = createPlugin<S>("marimo-table")
         )
         .nullish(),
       totalColumns: z.number(),
-      hasStableRowId: z.boolean().default(false),
     }),
   )
   .withFunctions<Functions>({
@@ -217,7 +216,6 @@ interface DataTableSearchProps {
   // Filters
   filters?: ColumnFiltersState;
   setFilters?: OnChangeFn<ColumnFiltersState>;
-  hasStableRowId: boolean;
 }
 
 export const LoadingDataTableComponent = memo(
@@ -239,11 +237,14 @@ export const LoadingDataTableComponent = memo(
     // We need to clear the selection when sort, query, or filters change
     // if we don't have a stable ID for each row, which is determined by
     // _marimo_row_id.
+    const hasStableRowId = props.fieldTypes?.some(
+      (fieldType) => fieldType[0] === INDEX_COLUMN_NAME,
+    );
     useEffectSkipFirstRender(() => {
-      if (!props.hasStableRowId) {
+      if (!hasStableRowId) {
         setValue([]);
       }
-    }, [setValue, filters, searchQuery, sorting, props.hasStableRowId]);
+    }, [setValue, filters, searchQuery, sorting, hasStableRowId]);
 
     // If pageSize changes, reset pagination state
     useEffect(() => {

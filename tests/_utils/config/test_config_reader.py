@@ -10,7 +10,6 @@ from marimo._utils.config.config import ConfigReader
 
 @dataclass
 class TestConfig:
-    __test__ = False
     value: str
 
 

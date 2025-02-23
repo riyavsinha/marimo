@@ -327,12 +327,6 @@ export function markdownAutoRunExtension(
       return;
     }
 
-    // If not focused, ignore
-    // This can cause multiple runs when in RTC mode
-    if (!update.view.hasFocus) {
-      return;
-    }
-
     // This happens on mount when we start in markdown mode
     const isFormattingChange = update.transactions.some((tr) =>
       tr.effects.some((effect) => effect.is(formattingChangeEffect)),

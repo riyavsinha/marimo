@@ -2348,7 +2348,7 @@ def launch_kernel(
     async def control_loop(kernel: Kernel) -> None:
         while True:
             try:
-                request = await asyncio.to_thread(control_queue.get)
+                request: ControlRequest | None = control_queue.get()
             except Exception as e:
                 # triggered on Windows when quit with Ctrl+C
                 LOGGER.debug("kernel queue.get() failed %s", e)

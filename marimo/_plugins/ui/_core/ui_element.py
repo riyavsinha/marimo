@@ -114,14 +114,7 @@ class UIElement(Html, Generic[S, T], metaclass=abc.ABCMeta):
     _value_frontend: S
     _value: T
 
-    # We want this to be fully random in production,
-    # otherwise cached session state could use incorrect object-ids.
-    # And changing object-ids are a way to force a re-render.
-    #
-    # This does mean that snapshotting exports in CI will produce
-    # different object-ids. If this is a problem, we can allow a
-    # fixed seed via an environment variable.
-    _random_seed = random.Random()
+    _random_seed = random.Random(42)
 
     def __init__(
         self,

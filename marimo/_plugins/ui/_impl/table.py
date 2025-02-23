@@ -270,10 +270,8 @@ class table(
         validate_no_integer_columns(data)
         validate_page_size(page_size)
 
-        has_stable_row_id = False
         if selection is not None:
-            data, has_stable_row_id = add_selection_column(data)
-        self._has_stable_row_id = has_stable_row_id
+            data = add_selection_column(data)
 
         # The original data passed in
         self._data = data
@@ -397,7 +395,6 @@ class table(
                 "freeze-columns-right": freeze_columns_right,
                 "text-justify-columns": text_justify_columns,
                 "wrapped-columns": wrapped_columns,
-                "has-stable-row-id": self._has_stable_row_id,
             },
             on_change=on_change,
             functions=(
@@ -443,13 +440,7 @@ class table(
         self, value: Union[List[int], List[str]]
     ) -> Union[List[JSONType], "IntoDataFrame"]:
         indices = [int(v) for v in value]
-        if self._has_stable_row_id:
-            # Search across the original data
-            self._selected_manager = self._manager.select_rows(indices)
-        else:
-            self._selected_manager = self._searched_manager.select_rows(
-                indices
-            )
+        self._selected_manager = self._searched_manager.select_rows(indices)
         self._has_any_selection = len(indices) > 0
         return unwrap_narwhals_dataframe(self._selected_manager.data)  # type: ignore[no-any-return]
 

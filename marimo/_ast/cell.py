@@ -8,7 +8,6 @@ import os
 from collections.abc import Awaitable
 from typing import TYPE_CHECKING, Any, Literal, Mapping, Optional
 
-from marimo._ast.agent_visitor import AgentVisitor
 from marimo._ast.sql_visitor import SQLVisitor
 from marimo._ast.visitor import ImportData, Language, Name, VariableData
 from marimo._runtime.exceptions import MarimoRuntimeException
@@ -138,18 +137,6 @@ class ParsedSQLStatements:
     parsed: Optional[list[str]] = None
 
 
-@dataclasses.dataclass
-class ParsedAgent:
-    was_agent_run: bool = False
-    name: Optional[str] = None
-
-
-# Create a mutable container for the agent data
-@dataclasses.dataclass
-class AgentData:
-    parsed: Optional[ParsedAgent] = None
-
-
 @dataclasses.dataclass(frozen=True)
 class CellImpl:
     # hash of code
@@ -194,8 +181,6 @@ class CellImpl:
     _raw_sqls: ParsedSQLStatements = dataclasses.field(
         default_factory=ParsedSQLStatements
     )
-    # Move _agent outside the frozen dataclass by making it a mutable container
-    _agent_data: AgentData = dataclasses.field(default_factory=AgentData)
 
     def configure(self, update: dict[str, Any] | CellConfig) -> CellImpl:
         """Update the cell config.
@@ -256,26 +241,6 @@ class CellImpl:
 
         self._raw_sqls.parsed = self._get_sqls(raw=True)
         return self._raw_sqls.parsed
-
-    def _parse_agent_name(self) -> None:
-        visitor = AgentVisitor()
-        visitor.visit(ast.parse(self.code))
-        # Modify the mutable container instead of the frozen field
-        self._agent_data.parsed = ParsedAgent(
-            was_agent_run=visitor.has_agent_run, name=visitor.get_agent_name()
-        )
-
-    @property
-    def had_agent_run(self) -> bool:
-        if self._agent_data.parsed is None:
-            self._parse_agent_name()
-        return self._agent_data.parsed.was_agent_run
-
-    @property
-    def agent_name(self) -> Optional[str]:
-        if self._agent_data.parsed is None:
-            self._parse_agent_name()
-        return self._agent_data.parsed.name
 
     @property
     def stale(self) -> bool:

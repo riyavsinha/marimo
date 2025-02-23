@@ -331,10 +331,6 @@ def test_value_with_search_then_selection() -> None:
         {"value": "banana"},
     ]
 
-    # Rows not in the search are not selected
-    with pytest.raises(IndexError):
-        table._convert_value(["2"])
-
     # empty search
     table._search(
         SearchTableArgs(
@@ -373,11 +369,10 @@ def test_value_with_search_then_selection_dfs(df: Any) -> None:
             page_number=0,
         )
     )
-    # Can still select rows not in the search
-    value = table._convert_value(["0", "1"])
+    value = table._convert_value(["0"])
     assert not isinstance(value, nw.DataFrame)
     assert nw.from_native(value)["a"][0] == "foo"
-    assert nw.from_native(value)["a"][1] == "bar"
+
     # empty search
     table._search(
         SearchTableArgs(

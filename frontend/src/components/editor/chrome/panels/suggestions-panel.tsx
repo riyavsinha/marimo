@@ -35,7 +35,7 @@ export const SuggestionsPanel: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 p-4">
+    <div className="flex flex-col gap-3 p-4 overflow-y-auto">
       {suggestions.map((suggestion) => (
         <div
           key={suggestion.id}

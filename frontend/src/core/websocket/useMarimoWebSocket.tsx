@@ -35,6 +35,7 @@ import {
 import { queryParamHandlers } from "../kernel/queryParamHandlers";
 import type { JsonString } from "@/utils/json/base64";
 import { useDatasetsActions } from "../datasets/state";
+import { useSuggestionsActions } from "../suggestions/state";
 import type { RequestId } from "../network/DeferredRequestRegistry";
 import type { VariableName } from "../variables/types";
 import type { CellId, UIElementId } from "../cells/ids";
@@ -67,6 +68,7 @@ export function useMarimoWebSocket(opts: {
   const { addDatasets, filterDatasetsFromVariables } = useDatasetsActions();
   const { addDataSourceConnection, filterDataSourcesFromVariables } =
     useDataSourceActions();
+  const { setSuggestions } = useSuggestionsActions();
   const { setLayoutData } = useLayoutActions();
   const [connection, setConnection] = useAtom(connectionAtom);
   const { addBanner } = useBannersActions();
@@ -220,6 +222,9 @@ export function useMarimoWebSocket(opts: {
         return;
       case "update-cell-ids":
         setCellIds({ cellIds: msg.data.cell_ids as CellId[] });
+        return;
+      case "suggestions":
+        setSuggestions(msg.data.suggestions);
         return;
       default:
         logNever(msg);

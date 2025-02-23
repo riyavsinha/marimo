@@ -26,6 +26,7 @@ from typing import (
 from uuid import uuid4
 
 from marimo import _loggers as loggers
+from marimo._ai.agents import Suggestion
 from marimo._ast.app import _AppConfig
 from marimo._ast.cell import CellConfig, RuntimeStateType
 from marimo._data.models import (
@@ -663,6 +664,12 @@ class FocusCell(Op):
 
 
 @dataclass
+class Suggestions(Op):
+    name: ClassVar[str] = "suggestions"
+    suggestions: List[Suggestion]
+
+
+@dataclass
 class UpdateCellCodes(Op):
     name: ClassVar[str] = "update-cell-codes"
     cell_ids: List[CellId_t]
@@ -721,4 +728,6 @@ MessageOperation = Union[
     FocusCell,
     UpdateCellCodes,
     UpdateCellIdsRequest,
+    # Suggestions
+    Suggestions,
 ]

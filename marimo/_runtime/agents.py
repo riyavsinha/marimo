@@ -25,7 +25,9 @@ class AgentRegistry:
                 raise ValueError(f"Agent name '{name}' is not registered.")
             return self._agents[name]
         else:
-            if len(self._agents) != 1:
+            if len(self._agents) == 0:
+                return None
+            elif len(self._agents) > 1:
                 raise ValueError(
                     "No agent name provided and multiple agents are registered."
                 )

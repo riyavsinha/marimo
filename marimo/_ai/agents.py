@@ -1,6 +1,8 @@
 # Copyright 2024 Marimo. All rights reserved.
 from __future__ import annotations
 
+import asyncio
+import inspect
 import uuid
 from dataclasses import dataclass
 from enum import Enum
@@ -49,6 +51,10 @@ class Agent:
     suggestions_fn: Optional[Callable[..., List[Suggestion]]] = None
 
 
+def is_coroutine_function(fn: Callable[..., Any]) -> bool:
+    return asyncio.iscoroutinefunction(fn) or inspect.iscoroutinefunction(fn)
+
+
 @mddoc
 def register_agent(agent: Agent) -> None:
     """Register an LLM agent."""
@@ -69,7 +75,9 @@ async def run_agent(prompt: str, name: Optional[str] = None) -> Any:
     try:
         _registry = get_context().agent_registry
         agent = _registry.get_agent(name)
-        result = agent.run_fn(prompt)
-        return result
+        if is_coroutine_function(agent.run_fn):
+            return await agent.run_fn(prompt)
+        else:
+            return agent.run_fn(prompt)
     except ContextNotInitializedError:
         pass

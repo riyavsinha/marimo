@@ -35,7 +35,7 @@ export const SuggestionsPanel: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 p-4">
+    <div className="flex flex-col gap-3 p-4 overflow-y-auto">
       {suggestions.map((suggestion) => (
         <div
           key={suggestion.id}
@@ -49,17 +49,21 @@ export const SuggestionsPanel: React.FC = () => {
           )}
           onClick={() => handleSuggestionClick(suggestion.title)}
         >
-          <div className="flex items-center gap-2">
-            {suggestion.type === "prompt_warning" ? (
-              <MessageCircleWarningIcon className="h-6 w-6" />
-            ) : (
-              <MessageCircleQuestionIcon className="h-6 w-6" />
-            )}
-            <h3 className="font-medium">{suggestion.title}</h3>
+          <div className="flex items-start gap-2">
+            <div className="flex-shrink-0">
+              {suggestion.type === "prompt_warning" ? (
+                <MessageCircleWarningIcon className="h-6 w-6" />
+              ) : (
+                <MessageCircleQuestionIcon className="h-6 w-6" />
+              )}
+            </div>
+            <div className="flex-1">
+              <h3 className="font-medium">{suggestion.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {suggestion.description}
+              </p>
+            </div>
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {suggestion.description}
-          </p>
         </div>
       ))}
     </div>

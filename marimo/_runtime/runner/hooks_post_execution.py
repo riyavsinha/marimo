@@ -224,10 +224,8 @@ async def _broadcast_suggestions(
         return
 
     agent_name = cell.agent_name
-    suggestion_fn = (
-        get_context().agent_registry.get_agent(agent_name).suggestions_fn
-    )
-    if suggestion_fn is None:
+    agent = get_context().agent_registry.get_agent(agent_name)
+    if agent is None or agent.suggestions_fn is None:
         return
 
     async def _update_suggestions(
@@ -236,7 +234,7 @@ async def _broadcast_suggestions(
         suggestions = await suggestion_fn()
         Suggestions(suggestions=suggestions).broadcast()
 
-    asyncio.create_task(_update_suggestions(suggestion_fn))
+    asyncio.create_task(_update_suggestions(agent.suggestions_fn))
 
 
 @kernel_tracer.start_as_current_span("store_reference_to_output")

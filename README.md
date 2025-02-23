@@ -38,6 +38,10 @@ To use it, you need to install the `marimo-agents` package:
 pip install marimo-agents
 ```
 
+## But why?
+
+Research agents are a great way to explore data and hypotheses. However, many paths of inquiry lead to dead ends, and it's easy to get lost in a sea of irrelevant results. Instead, you may want to eventually delete the dead ends to focus on the most promising paths of inquiry. A notebook helps achieve this by enabling you to polish your research via deleting agent cells with irrelevant results, and also rearranging prompts to present data as a cohesive narrative.
+
 ## Usage
 
 An **Agent** is at its core a function that takes in a **Prompt** and returns a **Response**.
@@ -84,7 +88,7 @@ In the above example using:
 ```python
 import asyncio
 async def suggestions_fn():
-  asyncio.sleep(3)
+  await asyncio.sleep(3)
   return [
     mo.ai.agents.Suggestion(
       id="1",
@@ -105,7 +109,7 @@ This will render as:
 
 <img src="https://raw.githubusercontent.com/riyavsinha/marimo/main/docs/_static/agent-suggestions.png" width="700px" />
 
-You will notice that the suggestions are rendered in a new panel to the right of the agent cell. These are generated as a background task, so they can happen after the agent cell has returned its response.
+The suggestions are rendered in a new panel to the right of the agent cell. These are generated as a background task, so they can happen after the agent cell has returned its response.
 
 ---
 

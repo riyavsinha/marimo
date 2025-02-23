@@ -20,5 +20,8 @@ export const useSuggestionsActions = () => {
     clearSuggestions: () => {
       setSuggestions([]);
     },
+    setSuggestions: (suggestions: Suggestion[]) => {
+      setSuggestions(suggestions);
+    },
   };
 };

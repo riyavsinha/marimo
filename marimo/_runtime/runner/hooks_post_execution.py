@@ -1,9 +1,11 @@
 # Copyright 2024 Marimo. All rights reserved.
 from __future__ import annotations
 
-from typing import Any, Callable, Coroutine
+import asyncio
+from typing import Any, Callable, Coroutine, List
 
 from marimo import _loggers
+from marimo._ai.agents import Suggestion
 from marimo._ast.cell import CellImpl
 from marimo._data.get_datasets import (
     get_datasets_from_variables,
@@ -228,8 +230,13 @@ async def _broadcast_suggestions(
     if suggestion_fn is None:
         return
 
-    suggestions = await suggestion_fn()
-    Suggestions(suggestions=suggestions).broadcast()
+    async def _update_suggestions(
+        suggestion_fn: Callable[..., List[Suggestion]],
+    ) -> None:
+        suggestions = await suggestion_fn()
+        Suggestions(suggestions=suggestions).broadcast()
+
+    asyncio.create_task(_update_suggestions(suggestion_fn))
 
 
 @kernel_tracer.start_as_current_span("store_reference_to_output")

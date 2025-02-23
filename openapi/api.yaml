@@ -1495,6 +1495,36 @@ components:
       - $ref: '#/components/schemas/FocusCell'
       - $ref: '#/components/schemas/UpdateCellCodes'
       - $ref: '#/components/schemas/UpdateCellIdsRequest'
+      - properties:
+          name:
+            enum:
+            - suggestions
+            type: string
+          suggestions:
+            items:
+              properties:
+                description:
+                  type: string
+                id:
+                  type: string
+                title:
+                  type: string
+                type:
+                  enum:
+                  - prompt_idea
+                  - prompt_warning
+                  type: string
+              required:
+              - id
+              - title
+              - description
+              - type
+              type: object
+            type: array
+        required:
+        - suggestions
+        - name
+        type: object
     MimeType:
       enum:
       - application/json
@@ -2152,7 +2182,7 @@ components:
       type: object
 info:
   title: marimo API
-  version: 0.11.7
+  version: 0.0.1
 openapi: 3.1.0
 paths:
   /@file/{filename_and_length}:

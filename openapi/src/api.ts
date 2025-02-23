@@ -2728,10 +2728,9 @@ export interface components {
           suggestions: {
             description: string;
             id: string;
-            timestamp: number;
             title: string;
             /** @enum {string} */
-            type: "idea" | "warning" | "tip";
+            type: "prompt_idea" | "prompt_warning";
           }[];
         };
     /** @enum {string} */

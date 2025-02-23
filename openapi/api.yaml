@@ -1507,22 +1507,18 @@ components:
                   type: string
                 id:
                   type: string
-                timestamp:
-                  type: number
                 title:
                   type: string
                 type:
                   enum:
-                  - idea
-                  - warning
-                  - tip
+                  - prompt_idea
+                  - prompt_warning
                   type: string
               required:
               - id
               - title
               - description
               - type
-              - timestamp
               type: object
             type: array
         required:

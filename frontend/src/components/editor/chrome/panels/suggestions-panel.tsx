@@ -1,6 +1,10 @@
 import React from "react";
 import { useAtomValue } from "jotai";
-import { LightbulbIcon } from "lucide-react";
+import {
+  MessageCircleQuestionIcon,
+  MessageCircleWarningIcon,
+  LightbulbIcon,
+} from "lucide-react";
 import { suggestionsAtom } from "@/core/suggestions/state";
 import { cn } from "@/utils/cn";
 import { PanelEmptyState } from "./empty-state";
@@ -17,6 +21,7 @@ export const SuggestionsPanel: React.FC = () => {
       />
     );
   }
+  console.log(suggestions);
 
   return (
     <div className="flex flex-col gap-3 p-4">
@@ -26,22 +31,23 @@ export const SuggestionsPanel: React.FC = () => {
           className={cn(
             "rounded-lg border p-4 transition-colors",
             "hover:border-border-hover",
-            suggestion.type === "warning" &&
+            suggestion.type === "prompt_warning" &&
               "border-orange-500/50 bg-orange-500/10",
-            suggestion.type === "idea" && "border-blue-500/50 bg-blue-500/10",
-            suggestion.type === "tip" && "border-green-500/50 bg-green-500/10",
+            suggestion.type === "prompt_idea" &&
+              "border-blue-500/50 bg-blue-500/10",
           )}
         >
           <div className="flex items-center gap-2">
-            <LightbulbIcon className="h-4 w-4" />
+            {suggestion.type === "prompt_warning" ? (
+              <MessageCircleWarningIcon className="h-6 w-6" />
+            ) : (
+              <MessageCircleQuestionIcon className="h-6 w-6" />
+            )}
             <h3 className="font-medium">{suggestion.title}</h3>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
             {suggestion.description}
           </p>
-          <div className="mt-2 text-xs text-muted-foreground">
-            {new Date(suggestion.timestamp).toLocaleString()}
-          </div>
         </div>
       ))}
     </div>

@@ -4,8 +4,7 @@ export interface Suggestion {
   id: string;
   title: string;
   description: string;
-  type: "idea" | "warning" | "tip";
-  timestamp: number;
+  type: "prompt_idea" | "prompt_warning";
 }
 
 export const suggestionsAtom = atom<Suggestion[]>([]);

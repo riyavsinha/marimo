@@ -1,7 +1,6 @@
 # Copyright 2024 Marimo. All rights reserved.
 from __future__ import annotations
 
-import time
 import uuid
 from dataclasses import dataclass
 from enum import Enum
@@ -12,9 +11,8 @@ from marimo._runtime.context import ContextNotInitializedError, get_context
 
 
 class SuggestionType(str, Enum):
-    IDEA = "idea"
-    WARNING = "warning"
-    TIP = "tip"
+    PROMPT_IDEA = "prompt_idea"
+    PROMPT_WARNING = "prompt_warning"
 
 
 @dataclass
@@ -23,18 +21,16 @@ class Suggestion:
     title: str
     description: str
     type: SuggestionType
-    timestamp: float
 
     @classmethod
     def create(
-        cls, title: str, description: str, type: SuggestionType
+        cls, title: str, description: str, suggestion_type: SuggestionType
     ) -> "Suggestion":
         return cls(
             id=str(uuid.uuid4()),
             title=title,
             description=description,
-            type=type,
-            timestamp=time.time() * 1000,  # Convert to JS timestamp
+            type=suggestion_type,
         )
 
     def to_dict(self) -> dict:
@@ -43,20 +39,14 @@ class Suggestion:
             "title": self.title,
             "description": self.description,
             "type": self.type,
-            "timestamp": self.timestamp,
         }
 
 
+@dataclass
 class Agent:
-    def __init__(
-        self,
-        name: str,
-        run_fn: Callable[..., Any],
-        suggestions_fn: Optional[Callable[..., List[Suggestion]]] = None,
-    ):
-        self.name = name
-        self.run_fn = run_fn
-        self.suggestions_fn = suggestions_fn
+    name: str
+    run_fn: Callable[..., Any]
+    suggestions_fn: Optional[Callable[..., List[Suggestion]]] = None
 
 
 @mddoc

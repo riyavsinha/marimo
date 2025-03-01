@@ -29,8 +29,8 @@
 
 # Marimo Agents
 
-Marimo Agents is an experimental extension of Marimo that allows you to run
-notebooks with AI agents as first-class cells in your notebook.
+Marimo Agents is an experimental extension of Marimo pioneering **agentic notebooks**, allowing you to run
+notebooks with AI agents as first-class cells.
 
 To use it, you need to install the `marimo-agents` package:
 
@@ -40,7 +40,9 @@ pip install marimo-agents
 
 ## But why?
 
-Research agents are a great way to explore data and hypotheses. However, many paths of inquiry lead to dead ends, and it's easy to get lost in a sea of irrelevant results. Instead, you may want to eventually delete the dead ends to focus on the most promising paths of inquiry. A notebook helps achieve this by enabling you to polish your research via deleting agent cells with irrelevant results, and also rearranging prompts to present data as a cohesive narrative.
+Research agents are a great way to explore data and hypotheses. In a chat interface, though, the messages are in an immutable order, since each "message" in a "conversation" is dependent on the previous ones. This means that queries made by a user and data collected by an agent must remain in the same order in a chat. 
+
+However, in research, you may find that some queries lead to nowhere, or you may want to reorganize evidence you collect from different queries to the agent to form a cohesive narrative from your data. This is exactly what the notebook interface enables. Further, agentic notebooks allow for you to interleave markdown annotations and your own python code with agent calls for a richer data exploration and analysis workflow.
 
 ## Usage
 
